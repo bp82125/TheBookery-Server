@@ -6,9 +6,9 @@ import {
   getSachByIdController,
   updateSachController,
 } from "../controllers/sach.controller";
-import { asyncHandler } from "../middleware/asyncHandler";
-import { validateRequest } from "../middleware/validateRequest";
-import { CreateSachDto, UpdateSachDto } from "../dto/sach.dto";
+import { asyncHandler } from "../middlewares/asyncHandler";
+import { validateRequest } from "../middlewares/validateRequest";
+import { CreateSachDto, UpdateSachDto } from "../dtos/sach.dto";
 
 const sachRouter = Router();
 

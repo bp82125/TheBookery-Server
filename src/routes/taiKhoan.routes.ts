@@ -1,13 +1,13 @@
 import { Router } from "express";
-import { asyncHandler } from "../middleware/asyncHandler";
+import { asyncHandler } from "../middlewares/asyncHandler";
 import {
   createTaiKhoanController,
   deleteTaiKhoanController,
   getAllTaiKhoanController,
   getTaiKhoanByIdController,
 } from "../controllers/taiKhoan.controller";
-import { CreateTaiKhoanDto } from "../dto/taiKhoan.dto";
-import { validateRequest } from "../middleware/validateRequest";
+import { CreateTaiKhoanDto } from "../dtos/taiKhoan.dto";
+import { validateRequest } from "../middlewares/validateRequest";
 
 const taiKhoanRouter = Router();
 

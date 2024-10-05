@@ -1,4 +1,4 @@
-import { CreateTaiKhoanDto } from "../dto/taiKhoan.dto";
+import { CreateTaiKhoanDto } from "../dtos/taiKhoan.dto";
 import {
   createTaiKhoan,
   deleteTaiKhoan,

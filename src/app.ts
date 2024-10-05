@@ -9,9 +9,9 @@ import sachRouter from "./routes/sach.routes";
 // import nhanVienRouter from "./routes/nhanVienRoutes";
 // import theoDoiMuonSachRouter from "./routes/theoDoiMuonSachRoutes";
 
-import { logger } from "./middleware/logger";
-import { errorHandler } from "./middleware/errorHandler";
-import { notFoundHandler } from "./middleware/notFoundHandler";
+import { logger } from "./middlewares/logger";
+import { errorHandler } from "./middlewares/errorHandler";
+import { notFoundHandler } from "./middlewares/notFoundHandler";
 
 const app = express();
 

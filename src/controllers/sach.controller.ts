@@ -1,4 +1,4 @@
-import { CreateSachDto, UpdateSachDto } from "../dto/sach.dto";
+import { CreateSachDto, UpdateSachDto } from "../dtos/sach.dto";
 import {
   createSach,
   deleteSach,

@@ -2,7 +2,7 @@ import { plainToInstance } from "class-transformer";
 import {
   CreateNhaXuatBanDto,
   UpdateNhaXuatBanDto,
-} from "../dto/nhaXuatBan.dto";
+} from "../dtos/nhaXuatBan.dto";
 import { EntityNotFoundException } from "../exceptions/EntityNotFoundException";
 import { prisma } from "../prisma/prismaClient";
 

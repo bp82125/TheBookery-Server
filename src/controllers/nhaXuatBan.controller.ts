@@ -1,7 +1,7 @@
 import {
   CreateNhaXuatBanDto,
   UpdateNhaXuatBanDto,
-} from "../dto/nhaXuatBan.dto";
+} from "../dtos/nhaXuatBan.dto";
 import {
   createNhaXuatBan,
   deleteNhaXuatBan,

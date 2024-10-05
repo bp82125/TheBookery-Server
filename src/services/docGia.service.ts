@@ -1,5 +1,5 @@
 import { EntityNotFoundException } from "../exceptions/EntityNotFoundException";
-import { CreateDocGiaDto, UpdateDocGiaDto } from "../dto/docGia.dto";
+import { CreateDocGiaDto, UpdateDocGiaDto } from "../dtos/docGia.dto";
 import { prisma } from "../prisma/prismaClient";
 import { plainToInstance } from "class-transformer";
 

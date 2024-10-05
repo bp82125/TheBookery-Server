@@ -1,5 +1,5 @@
 import { plainToInstance } from "class-transformer";
-import { CreateSachDto, UpdateSachDto } from "../dto/sach.dto";
+import { CreateSachDto, UpdateSachDto } from "../dtos/sach.dto";
 import { EntityNotFoundException } from "../exceptions/EntityNotFoundException";
 import { prisma } from "../prisma/prismaClient";
 

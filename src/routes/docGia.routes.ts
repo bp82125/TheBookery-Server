@@ -6,9 +6,9 @@ import {
   updateDocGiaController,
   deleteDocGiaController,
 } from "../controllers/docGia.controller";
-import { asyncHandler } from "../middleware/asyncHandler";
-import { validateRequest } from "../middleware/validateRequest";
-import { CreateDocGiaDto, UpdateDocGiaDto } from "../dto/docGia.dto";
+import { asyncHandler } from "../middlewares/asyncHandler";
+import { validateRequest } from "../middlewares/validateRequest";
+import { CreateDocGiaDto, UpdateDocGiaDto } from "../dtos/docGia.dto";
 
 const docGiaRouter = Router();
 

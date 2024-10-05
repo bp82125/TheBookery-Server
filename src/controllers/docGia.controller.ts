@@ -1,4 +1,4 @@
-import { CreateDocGiaDto, UpdateDocGiaDto } from "../dto/docGia.dto";
+import { CreateDocGiaDto, UpdateDocGiaDto } from "../dtos/docGia.dto";
 import {
   createDocGia,
   deleteDocGia,

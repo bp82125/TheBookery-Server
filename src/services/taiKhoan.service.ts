@@ -1,4 +1,4 @@
-import { CreateTaiKhoanDto } from "../dto/taiKhoan.dto";
+import { CreateTaiKhoanDto } from "../dtos/taiKhoan.dto";
 import { EntityNotFoundException } from "../exceptions/EntityNotFoundException";
 import { prisma } from "../prisma/prismaClient";
 import { UsernameAlreadyExistsException } from "../exceptions/UsernameAlreadyExistsException";

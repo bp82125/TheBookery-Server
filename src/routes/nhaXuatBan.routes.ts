@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { asyncHandler } from "../middleware/asyncHandler";
+import { asyncHandler } from "../middlewares/asyncHandler";
 import {
   createNhaXuatBanController,
   deleteNhaXuatBanController,
@@ -10,8 +10,8 @@ import {
 import {
   CreateNhaXuatBanDto,
   UpdateNhaXuatBanDto,
-} from "../dto/nhaXuatBan.dto";
-import { validateRequest } from "../middleware/validateRequest";
+} from "../dtos/nhaXuatBan.dto";
+import { validateRequest } from "../middlewares/validateRequest";
 
 const nhaXuatBanRouter = Router();
 
