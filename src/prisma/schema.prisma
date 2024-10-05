@@ -1,0 +1,111 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model DocGia {
+  MaDocGia        String              @id @default(auto()) @map("_id") @db.ObjectId
+  HoLot           String
+  Ten             String
+  NgaySinh        DateTime            @db.Date
+  GioiTinh        GioiTinh
+  DiaChi          String
+  DienThoai       String
+  DaXoa           Boolean             @default(false)
+  TheoDoiMuonSach TheoDoiMuonSach[]
+
+  TaiKhoan        TaiKhoan?           @relation(fields: [MaTaiKhoan], references: [MaTaiKhoan])
+  MaTaiKhoan      String              @db.ObjectId @unique
+}
+
+model Sach {
+  MaSach          String              @id @default(auto()) @map("_id") @db.ObjectId
+  TenSach         String
+  DonGia          Float
+  SoQuyen         Int
+  NamXuatBan      Int
+  NguonGoc        String?
+  HinhAnh         String?
+  DaXoa           Boolean             @default(false)
+  TheoDoiMuonSach TheoDoiMuonSach[]
+
+  MaNXB           String              @db.ObjectId
+  NhaXuatBan      NhaXuatBan?         @relation(fields: [MaNXB], references: [MaNXB])
+}
+
+model NhaXuatBan {
+  MaNXB           String              @id @default(auto()) @map("_id") @db.ObjectId
+  TenNXB          String
+  DiaChi          String
+  DaXoa           Boolean             @default(false)
+  Sach            Sach[]
+}
+
+model TheoDoiMuonSach {
+  MaTDMS          String              @id @default(auto()) @map("_id") @db.ObjectId
+  MaDocGia        String              @db.ObjectId
+  MaSach          String              @db.ObjectId
+
+  NgayYeuCau      DateTime            @default(now())
+  NgayDuyet       DateTime?
+  NgayMuon        DateTime?
+  NgayTra         DateTime?
+
+  TrangThaiMuonSach TrangThaiMuonSach  @default(PENDING)
+
+  DocGia          DocGia              @relation(fields: [MaDocGia], references: [MaDocGia])
+  Sach            Sach                @relation(fields: [MaSach], references: [MaSach])
+}
+
+model NhanVien {
+  MSNV            String              @id @default(auto()) @map("_id") @db.ObjectId
+  HoTenNV         String
+  Chucvu          String
+  Diachi          String
+  SoDienThoai     String
+  DaXoa           Boolean             @default(false)
+
+  TaiKhoan        TaiKhoan?           @relation(fields: [MaTaiKhoan], references: [MaTaiKhoan])
+  MaTaiKhoan      String              @db.ObjectId @unique
+}
+
+model TaiKhoan {
+  MaTaiKhoan      String              @id @default(auto()) @map("_id") @db.ObjectId
+  TenDangNhap     String              @unique
+  MatKhau         String
+  LoaiTaiKhoan    LoaiTaiKhoan        @default(USER)
+  DocGia          DocGia?
+  NhanVien        NhanVien?
+  DaXoa           Boolean             @default(false)
+  KichHoat        Boolean             @default(true)
+}
+
+enum GioiTinh {
+  MALE
+  FEMALE
+  UNKNOWN
+}
+
+enum LoaiTaiKhoan {
+  USER
+  EMPLOYEE
+  ADMINISTRATOR
+}
+
+enum TrangThaiMuonSach {
+  PENDING
+  APPROVED
+  REJECTED
+  PICKED_UP
+  RETURNED
+}
