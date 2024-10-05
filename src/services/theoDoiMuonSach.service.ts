@@ -9,6 +9,7 @@ import { EntityNotFoundException } from "../exceptions/EntityNotFoundException";
 import { InvalidPickupStatusException } from "../exceptions/InvalidPickupStatusException";
 import { NoCopiesAvailableException } from "../exceptions/NoCopiesAvailableException";
 import { prisma } from "../prisma/prismaClient";
+import { BookNotReturnedException } from "../exceptions/BookNotReturnedException";
 
 export const getAllTDMS = async () => {
   return prisma.theoDoiMuonSach.findMany({
@@ -38,6 +39,21 @@ export const getTDMSById = async (id: string) => {
 };
 
 export const createTDMS = async (data: CreateTDMSDto) => {
+  const existingTDMS = await prisma.theoDoiMuonSach.findFirst({
+    where: {
+      MaSach: data.MaSach,
+      TrangThaiMuonSach: {
+        notIn: ["RETURNED", "REJECTED"],
+      },
+    },
+  });
+
+  if (existingTDMS) {
+    throw new BookNotReturnedException(
+      `Sách với mã ${data.MaSach} đã được mượn trước đó và chưa trả`
+    );
+  }
+
   const TDMS = await prisma.theoDoiMuonSach.create({ data });
   return TDMS;
 };
