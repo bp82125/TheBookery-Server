@@ -8,6 +8,7 @@ import {
 } from "../services/nhanVien.service";
 import { CreateNhanVienDto, UpdateNhanVienDto } from "../dtos/nhanVien.dto";
 import { apiResponse } from "../utils/apiResponse";
+import httpStatus from "http-status";
 
 export const getAllNhanVienController = async (req: Request, res: Response) => {
   try {
@@ -16,7 +17,7 @@ export const getAllNhanVienController = async (req: Request, res: Response) => {
     return apiResponse(
       res,
       true,
-      200,
+      httpStatus.OK,
       nhanViens,
       null,
       "Lấy danh sách nhân viên thành công"
@@ -36,7 +37,7 @@ export const getNhanVienByIdController = async (
     return apiResponse(
       res,
       true,
-      200,
+      httpStatus.OK,
       nhanVien,
       null,
       `Lấy nhân viên với mã ${id} thành công`
@@ -55,7 +56,7 @@ export const createNhanVienController = async (
     return apiResponse(
       res,
       true,
-      201,
+      httpStatus.CREATED,
       newNhanVien,
       null,
       "Thêm nhân viên thành công"
@@ -75,7 +76,7 @@ export const updateNhanVienController = async (
     return apiResponse(
       res,
       true,
-      200,
+      httpStatus.OK,
       updatedNhanVien,
       null,
       `Cập nhật nhân viên với mã ${id} thành công`
@@ -95,7 +96,7 @@ export const deleteNhanVienController = async (
     return apiResponse(
       res,
       true,
-      200,
+      httpStatus.NO_CONTENT,
       null,
       null,
       `Xóa nhân viên với mã ${id} thành công`

@@ -7,7 +7,7 @@ import taiKhoanRouter from "./routes/taiKhoan.routes";
 import nhaXuatBanRouter from "./routes/nhaXuatBan.routes";
 import sachRouter from "./routes/sach.routes";
 import nhanVienRouter from "./routes/nhanVien.routes";
-// import theoDoiMuonSachRouter from "./routes/theoDoiMuonSachRoutes";
+import theoDoiMuonSachRouter from "./routes/theoDoiMuonSach.routes";
 
 import { logger } from "./middlewares/logger";
 import { errorHandler } from "./middlewares/errorHandler";
@@ -24,7 +24,7 @@ apiRouter.use("/tai-khoan", taiKhoanRouter);
 apiRouter.use("/nhan-vien", nhanVienRouter);
 apiRouter.use("/nha-xuat-ban", nhaXuatBanRouter);
 apiRouter.use("/sach", sachRouter);
-// apiRouter.use("/theo-doi-muon-sach", theoDoiMuonSachRouter);
+apiRouter.use("/theo-doi-muon-sach", theoDoiMuonSachRouter);
 
 app.use("/api/v1", apiRouter);
 app.use(notFoundHandler);

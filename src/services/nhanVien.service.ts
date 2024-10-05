@@ -3,6 +3,7 @@ import { prisma } from "../prisma/prismaClient";
 import { CreateNhanVienDto, UpdateNhanVienDto } from "../dtos/nhanVien.dto";
 import { EntityNotFoundException } from "../exceptions/EntityNotFoundException";
 import { plainToInstance } from "class-transformer";
+import { AccountAlreadyLinkedException } from "../exceptions/AccountAlreadyLinkedException";
 
 export const getAllNhanVien = async () => {
   return await prisma.nhanVien.findMany({
@@ -23,6 +24,34 @@ export const getNhanVienById = async (id: string) => {
 };
 
 export const createNhanVien = async (data: CreateNhanVienDto) => {
+  const MaTaiKhoan = data.MaTaiKhoan;
+
+  const taiKhoan = await prisma.taiKhoan.findUnique({
+    where: { MaTaiKhoan: MaTaiKhoan },
+    include: {
+      DocGia: true,
+      NhanVien: true,
+    },
+  });
+
+  if (!taiKhoan) {
+    throw new EntityNotFoundException(
+      `Không tìm thấy tài khoản với mã ${MaTaiKhoan}`
+    );
+  }
+
+  if (taiKhoan.DocGia) {
+    throw new AccountAlreadyLinkedException(
+      `Tài khoản với mã ${MaTaiKhoan} đã được liên kết với một độc giả.`
+    );
+  }
+
+  if (taiKhoan.NhanVien) {
+    throw new AccountAlreadyLinkedException(
+      `Tài khoản với mã ${MaTaiKhoan} đã được liên kết với một nhân viên.`
+    );
+  }
+
   const nhanVien = await prisma.nhanVien.create({
     data: data,
   });

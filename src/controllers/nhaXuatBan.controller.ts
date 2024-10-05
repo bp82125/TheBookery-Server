@@ -11,18 +11,18 @@ import {
 } from "../services/nhaXuatBan.service";
 import { apiResponse } from "../utils/apiResponse";
 import { Request, Response } from "express";
+import httpStatus from "http-status";
 
 export const getAllNhaXuatBanController = async (
   req: Request,
   res: Response
 ) => {
-    try {
-      
+  try {
     const docGias = await getAllNhaXuatBan();
     return apiResponse(
       res,
       true,
-      200,
+      httpStatus.OK,
       docGias,
       null,
       "Lấy danh sách nhà xuất bản thành công"
@@ -42,7 +42,7 @@ export const getNhaXuatBanByIdController = async (
     return apiResponse(
       res,
       true,
-      200,
+      httpStatus.OK,
       docGia,
       null,
       `Lấy nhà xuất bản với mã ${id} thành công`
@@ -61,7 +61,7 @@ export const createNhaXuatBanController = async (
     return apiResponse(
       res,
       true,
-      201,
+      httpStatus.CREATED,
       newNhaXuatBan,
       null,
       "Thêm nhà xuất bản thành công"
@@ -81,7 +81,7 @@ export const updateNhaXuatBanController = async (
     return apiResponse(
       res,
       true,
-      200,
+      httpStatus.OK,
       updatedNhaXuatBan,
       null,
       `Cập nhật nhà xuất bản với mã ${id} thành công`
@@ -101,7 +101,7 @@ export const deleteNhaXuatBanController = async (
     return apiResponse(
       res,
       true,
-      200,
+      httpStatus.NO_CONTENT,
       null,
       null,
       `Xóa nhà xuất bản với mã ${id} thành công`

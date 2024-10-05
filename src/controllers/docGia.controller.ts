@@ -8,6 +8,7 @@ import {
 } from "../services/docGia.service";
 import { apiResponse } from "../utils/apiResponse";
 import { Request, Response } from "express";
+import httpStatus from "http-status";
 
 export const getAllDocGiaController = async (req: Request, res: Response) => {
   try {
@@ -15,7 +16,7 @@ export const getAllDocGiaController = async (req: Request, res: Response) => {
     return apiResponse(
       res,
       true,
-      200,
+      httpStatus.OK,
       docGias,
       null,
       "Lấy danh sách đọc giả thành công"
@@ -32,7 +33,7 @@ export const getDocGiaByIdController = async (req: Request, res: Response) => {
     return apiResponse(
       res,
       true,
-      200,
+      httpStatus.OK,
       docGia,
       null,
       `Lấy đọc giả với mã ${id} thành công`
@@ -51,7 +52,7 @@ export const createDocGiaController = async (
     return apiResponse(
       res,
       true,
-      201,
+      httpStatus.CREATED,
       newDocGia,
       null,
       "Thêm đọc giả thành công"
@@ -68,7 +69,14 @@ export const updateDocGiaController = async (
   const { id } = req.params;
   try {
     const updatedDocGia = await updateDocGia(id, req.body);
-    return apiResponse(res, true, 200, updatedDocGia);
+    return apiResponse(
+      res,
+      true,
+      httpStatus.OK,
+      updatedDocGia,
+      null,
+      `Cập nhật đọc giả với mã ${id} thành công`
+    );
   } catch (error) {
     throw error;
   }
@@ -84,7 +92,7 @@ export const deleteDocGiaController = async (
     return apiResponse(
       res,
       true,
-      200,
+      httpStatus.NO_CONTENT,
       message,
       null,
       `Xóa đọc giả với mã ${id} thành công`
