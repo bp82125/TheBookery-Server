@@ -12,15 +12,13 @@ export const getAllTaiKhoan = async () => {
 };
 
 export const getTaiKhoanById = async (id: string) => {
-  const taiKhoan = await prisma.taiKhoan
-    .findUnique({
-      where: { MaTaiKhoan: id },
-    })
-    .catch(() => {
-      throw new EntityNotFoundException(
-        `Không tìm thấy tài khoản với mã ${id}`
-      );
-    });
+  const taiKhoan = await prisma.taiKhoan.findUnique({
+    where: { MaTaiKhoan: id },
+  });
+
+  if (!taiKhoan) {
+    throw new EntityNotFoundException(`Không tìm thấy tài khoản với mã ${id}`);
+  }
 
   return taiKhoan;
 };
@@ -50,15 +48,13 @@ export const createTaiKhoan = async (data: CreateTaiKhoanDto) => {
 };
 
 export const deleteTaiKhoan = async (id: string) => {
-  await prisma.taiKhoan
-    .findUnique({
-      where: { MaTaiKhoan: id },
-    })
-    .catch(() => {
-      throw new EntityNotFoundException(
-        `Không tìm thấy tài khoản với mã ${id}`
-      );
-    });
+  const taiKhoan = await prisma.taiKhoan.findUnique({
+    where: { MaTaiKhoan: id },
+  });
+
+  if (!taiKhoan) {
+    throw new EntityNotFoundException(`Không tìm thấy tài khoản với mã ${id}`);
+  }
 
   await prisma.taiKhoan.update({
     where: { MaTaiKhoan: id },

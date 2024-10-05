@@ -70,8 +70,8 @@ model TheoDoiMuonSach {
 model NhanVien {
   MSNV            String              @id @default(auto()) @map("_id") @db.ObjectId
   HoTenNV         String
-  Chucvu          String
-  Diachi          String
+  ChucVu          String
+  DiaChi          String
   SoDienThoai     String
   DaXoa           Boolean             @default(false)
 

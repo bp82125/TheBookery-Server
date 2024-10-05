@@ -16,7 +16,8 @@ export const getAllNhaXuatBanController = async (
   req: Request,
   res: Response
 ) => {
-  try {
+    try {
+      
     const docGias = await getAllNhaXuatBan();
     return apiResponse(
       res,
