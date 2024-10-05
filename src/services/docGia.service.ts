@@ -12,6 +12,7 @@ export const getAllDocGia = async () => {
 export const getDocGiaById = async (id: string) => {
   const docGia = await prisma.docGia.findUnique({
     where: { MaDocGia: id },
+    include: { TaiKhoan: true },
   });
 
   if (!docGia) {
@@ -27,6 +28,7 @@ export const createDocGia = async (data: CreateDocGiaDto) => {
 
   const docGia = await prisma.docGia.create({
     data: docGiaData,
+    include: { TaiKhoan: true },
   });
 
   return docGia;
@@ -52,6 +54,7 @@ export const updateDocGia = async (id: string, data: UpdateDocGiaDto) => {
       ...updatedFields,
       ...docGiaData,
     },
+    include: { TaiKhoan: true },
   });
 
   return updatedDocGia;

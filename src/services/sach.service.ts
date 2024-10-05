@@ -6,12 +6,14 @@ import { prisma } from "../prisma/prismaClient";
 export const getAllSach = async () => {
   return await prisma.sach.findMany({
     where: { DaXoa: false },
+    include: { NhaXuatBan: true },
   });
 };
 
 export const getSachById = async (id: string) => {
   const sach = await prisma.sach.findUnique({
     where: { MaSach: id },
+    include: { NhaXuatBan: true },
   });
 
   if (!sach) {
