@@ -11,20 +11,16 @@ import { apiResponse } from "../utils/apiResponse";
 import httpStatus from "http-status";
 
 export const getAllNhanVienController = async (req: Request, res: Response) => {
-  try {
-    console.log("hi");
-    const nhanViens = await getAllNhanVien();
-    return apiResponse(
-      res,
-      true,
-      httpStatus.OK,
-      nhanViens,
-      null,
-      "Lấy danh sách nhân viên thành công"
-    );
-  } catch (error) {
-    throw error;
-  }
+  console.log("hi");
+  const nhanViens = await getAllNhanVien();
+  return apiResponse(
+    res,
+    true,
+    httpStatus.OK,
+    nhanViens,
+    null,
+    "Lấy danh sách nhân viên thành công"
+  );
 };
 
 export const getNhanVienByIdController = async (
@@ -32,38 +28,30 @@ export const getNhanVienByIdController = async (
   res: Response
 ) => {
   const { id } = req.params;
-  try {
-    const nhanVien = await getNhanVienById(id);
-    return apiResponse(
-      res,
-      true,
-      httpStatus.OK,
-      nhanVien,
-      null,
-      `Lấy nhân viên với mã ${id} thành công`
-    );
-  } catch (error) {
-    throw error;
-  }
+  const nhanVien = await getNhanVienById(id);
+  return apiResponse(
+    res,
+    true,
+    httpStatus.OK,
+    nhanVien,
+    null,
+    `Lấy nhân viên với mã ${id} thành công`
+  );
 };
 
 export const createNhanVienController = async (
   req: Request<{}, {}, CreateNhanVienDto>,
   res: Response
 ) => {
-  try {
-    const newNhanVien = await createNhanVien(req.body);
-    return apiResponse(
-      res,
-      true,
-      httpStatus.CREATED,
-      newNhanVien,
-      null,
-      "Thêm nhân viên thành công"
-    );
-  } catch (error) {
-    throw error;
-  }
+  const newNhanVien = await createNhanVien(req.body);
+  return apiResponse(
+    res,
+    true,
+    httpStatus.CREATED,
+    newNhanVien,
+    null,
+    "Thêm nhân viên thành công"
+  );
 };
 
 export const updateNhanVienController = async (
@@ -71,19 +59,15 @@ export const updateNhanVienController = async (
   res: Response
 ) => {
   const { id } = req.params;
-  try {
-    const updatedNhanVien = await updateNhanVien(id, req.body);
-    return apiResponse(
-      res,
-      true,
-      httpStatus.OK,
-      updatedNhanVien,
-      null,
-      `Cập nhật nhân viên với mã ${id} thành công`
-    );
-  } catch (error) {
-    throw error;
-  }
+  const updatedNhanVien = await updateNhanVien(id, req.body);
+  return apiResponse(
+    res,
+    true,
+    httpStatus.OK,
+    updatedNhanVien,
+    null,
+    `Cập nhật nhân viên với mã ${id} thành công`
+  );
 };
 
 export const deleteNhanVienController = async (
@@ -91,17 +75,13 @@ export const deleteNhanVienController = async (
   res: Response
 ) => {
   const { id } = req.params;
-  try {
-    await deleteNhanVien(id);
-    return apiResponse(
-      res,
-      true,
-      httpStatus.NO_CONTENT,
-      null,
-      null,
-      `Xóa nhân viên với mã ${id} thành công`
-    );
-  } catch (error) {
-    throw error;
-  }
+  await deleteNhanVien(id);
+  return apiResponse(
+    res,
+    true,
+    httpStatus.NO_CONTENT,
+    null,
+    null,
+    `Xóa nhân viên với mã ${id} thành công`
+  );
 };
