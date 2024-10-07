@@ -1,10 +1,25 @@
 import { Request } from "express";
+import { ValidationException } from "../exceptions/ValidationException";
+import { ZodObject } from "zod";
 
-export const getSortingParams = (req: Request) => {
+export const getSortingClause = (
+  req: Request,
+  sortFieldsSchema: ZodObject<any>
+) => {
   const { sortBy = "createdAt", order = "asc" } = req.query as {
     sortBy?: string;
     order?: string;
   };
+
+  const validSortFields = Object.keys(sortFieldsSchema.shape);
+
+  if (!validSortFields.includes(sortBy)) {
+    throw new ValidationException(
+      `Trường dùng để sắp xếp không hợp lệ: ${sortBy}, các trường hợp hợp lệ bao gồm: ${validSortFields.join(
+        ", "
+      )}`
+    );
+  }
 
   const sortByFields = sortBy.split(".");
   const orderByClause: { [key: string]: any } = {};

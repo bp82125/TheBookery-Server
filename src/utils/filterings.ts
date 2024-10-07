@@ -1,24 +1,19 @@
 import { Request } from "express";
+import { z } from "zod";
 
-export const getWhereClause = (
-  req: Request,
-  validFields: Array<{ name: string }>
-) => {
+export const getWhereClause = (req: Request, schema: z.ZodObject<any>) => {
   const filters = req.query;
-
-  const whereClause: { [key: string]: any } = {
-    DaXoa: false,
-  };
+  const whereClause: { [key: string]: any } = { DaXoa: false };
 
   let hasInvalidFilter = false;
+
   Object.entries(filters).forEach(([key, value]) => {
     if (!["pageNumber", "limitNumber", "sortBy", "order"].includes(key)) {
-      const field = validFields.find((field) => field.name === key);
+      const keys = key.split(".");
+      let currentLevel = whereClause;
 
-      if (field) {
-        const keys = key.split(".");
-        let currentLevel = whereClause;
-
+      try {
+        schema.parse({ [key]: value });
         keys.forEach((fieldKey, index) => {
           if (index === keys.length - 1) {
             currentLevel[fieldKey] = value;
@@ -29,7 +24,8 @@ export const getWhereClause = (
             currentLevel = currentLevel[fieldKey];
           }
         });
-      } else {
+      } catch (err) {
+        console.log(err);
         hasInvalidFilter = true;
       }
     }
