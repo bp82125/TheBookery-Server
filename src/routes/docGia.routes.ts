@@ -13,7 +13,7 @@ import { validateSortingParams } from "../middlewares/sortingValidator";
 import { docGiaFields } from "../utils/modelFields";
 import { validatePaginationParams } from "../middlewares/paginationValidator";
 import { getFieldNames } from "../utils/getFieldNames";
-import { validateFilterParams } from "../middlewares/filterValidators";
+import { validateFilterParams } from "../middlewares/filterValidator";
 
 const docGiaRouter = Router();
 
