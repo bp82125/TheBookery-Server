@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { defaultFields } from "./defaultFields";
 
-export const TaiKhoan = z
+export const taiKhoanFields = z
   .object({
     ...defaultFields,
     TenDangNhap: z.string().optional(),

@@ -4,11 +4,25 @@ import { prisma } from "../prisma/prismaClient";
 import { UsernameAlreadyExistsException } from "../exceptions/UsernameAlreadyExistsException";
 import { scryptSync, randomBytes } from "crypto";
 
-export const getAllTaiKhoan = async () => {
-  const taiKhoan = await prisma.taiKhoan.findMany({
-    where: { DaXoa: false },
-  });
-  return taiKhoan || [];
+export const getAllTaiKhoan = async (
+  page: number,
+  limit: number,
+  orderByClause: object,
+  whereClause: object
+) => {
+  const skip = (page - 1) * limit;
+  const [taiKhoans, total] = await Promise.all([
+    prisma.taiKhoan.findMany({
+      where: whereClause,
+      skip: skip,
+      take: limit,
+      orderBy: orderByClause,
+      include: { DocGia: true, NhanVien: true },
+    }),
+    prisma.taiKhoan.count({ where: whereClause }),
+  ]);
+
+  return { taiKhoans, total };
 };
 
 export const getTaiKhoanById = async (id: string) => {

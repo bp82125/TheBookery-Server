@@ -15,14 +15,30 @@ import {
   PickUpTDMSDto,
 } from "../dtos/theoDoiMuonSach.dto";
 import httpStatus from "http-status";
+import { getPaginationInfo, getPaginationParams } from "../utils/paginations";
+import { getSortingClause } from "../utils/sortings";
+import { getWhereClause } from "../utils/filterings";
+import { theoDoiMuonSachFields } from "../zods/theoDoiMuonSachFields";
 
 export const getAllTDMSController = async (req: Request, res: Response) => {
-  const TDMSs = await getAllTDMS();
+  const { page, limit } = getPaginationParams(req);
+  const orderByClause = getSortingClause(req, theoDoiMuonSachFields);
+  const whereClause = getWhereClause(req, theoDoiMuonSachFields);
+
+  const { TDMSs, total } = await getAllTDMS(
+    page,
+    limit,
+    orderByClause,
+    whereClause
+  );
+
+  const pagination = getPaginationInfo(total, page, limit);
+
   return apiResponse(
     res,
     true,
     httpStatus.OK,
-    TDMSs,
+    { TDMSs, pagination },
     null,
     "Lấy danh sách theo dõi mượn sách thành công"
   );

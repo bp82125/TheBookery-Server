@@ -5,15 +5,32 @@ import { EntityNotFoundException } from "../exceptions/EntityNotFoundException";
 import { plainToInstance } from "class-transformer";
 import { AccountAlreadyLinkedException } from "../exceptions/AccountAlreadyLinkedException";
 
-export const getAllNhanVien = async () => {
-  return await prisma.nhanVien.findMany({
-    where: { DaXoa: false },
-  });
+export const getAllNhanVien = async (
+  page: number,
+  limit: number,
+  orderByClause: object,
+  whereClause: object
+) => {
+  const skip = (page - 1) * limit;
+  const [nhanViens, total] = await Promise.all([
+    prisma.nhanVien.findMany({
+      where: whereClause,
+      skip: skip,
+      take: limit,
+      orderBy: orderByClause,
+      include: { TaiKhoan: true },
+    }),
+
+    prisma.nhanVien.count({ where: whereClause }),
+  ]);
+
+  return { nhanViens, total };
 };
 
 export const getNhanVienById = async (id: string) => {
   const nhanVien = await prisma.nhanVien.findUnique({
     where: { MSNV: id },
+    include: { TaiKhoan: true },
   });
 
   if (!nhanVien) {
@@ -54,6 +71,7 @@ export const createNhanVien = async (data: CreateNhanVienDto) => {
 
   const nhanVien = await prisma.nhanVien.create({
     data: data,
+    include: { TaiKhoan: true },
   });
 
   return nhanVien;
@@ -76,6 +94,7 @@ export const updateNhanVien = async (id: string, data: UpdateNhanVienDto) => {
     data: {
       ...nhanVienData,
     },
+    include: { TaiKhoan: true },
   });
 
   return updatedNhanVien;

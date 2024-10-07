@@ -12,17 +12,32 @@ import {
 import { apiResponse } from "../utils/apiResponse";
 import { Request, Response } from "express";
 import httpStatus from "http-status";
+import { nhaXuatBanFields } from "../zods/nhaXuatBanFields";
+import { getPaginationInfo, getPaginationParams } from "../utils/paginations";
+import { getSortingClause } from "../utils/sortings";
+import { getWhereClause } from "../utils/filterings";
 
 export const getAllNhaXuatBanController = async (
   req: Request,
   res: Response
 ) => {
-  const docGias = await getAllNhaXuatBan();
+  const { page, limit } = getPaginationParams(req);
+  const orderByClause = getSortingClause(req, nhaXuatBanFields);
+  const whereClause = getWhereClause(req, nhaXuatBanFields);
+
+  const { nhaXuatBans, total } = await getAllNhaXuatBan(
+    page,
+    limit,
+    orderByClause,
+    whereClause
+  );
+
+  const pagination = getPaginationInfo(total, page, limit);
   return apiResponse(
     res,
     true,
     httpStatus.OK,
-    docGias,
+    { nhaXuatBans, pagination },
     null,
     "Lấy danh sách nhà xuất bản thành công"
   );
@@ -33,12 +48,12 @@ export const getNhaXuatBanByIdController = async (
   res: Response
 ) => {
   const { id } = req.params;
-  const docGia = await getNhaXuatBanById(id);
+  const nhaXuatBan = await getNhaXuatBanById(id);
   return apiResponse(
     res,
     true,
     httpStatus.OK,
-    docGia,
+    nhaXuatBan,
     null,
     `Lấy nhà xuất bản với mã ${id} thành công`
   );

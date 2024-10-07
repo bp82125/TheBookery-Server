@@ -6,10 +6,25 @@ import {
 import { EntityNotFoundException } from "../exceptions/EntityNotFoundException";
 import { prisma } from "../prisma/prismaClient";
 
-export const getAllNhaXuatBan = async () => {
-  return await prisma.nhaXuatBan.findMany({
-    where: { DaXoa: false },
-  });
+export const getAllNhaXuatBan = async (
+  page: number,
+  limit: number,
+  orderByClause: object,
+  whereClause: object
+) => {
+  const skip = (page - 1) * limit;
+  const [nhaXuatBans, total] = await Promise.all([
+    prisma.nhaXuatBan.findMany({
+      where: whereClause,
+      skip: skip,
+      take: limit,
+      orderBy: orderByClause,
+    }),
+
+    prisma.nhaXuatBan.count({ where: whereClause }),
+  ]);
+
+  return { nhaXuatBans, total };
 };
 
 export const getNhaXuatBanById = async (id: string) => {

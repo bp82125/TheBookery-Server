@@ -8,7 +8,7 @@ export const getWhereClause = (req: Request, schema: z.ZodObject<any>) => {
   let hasInvalidFilter = false;
 
   Object.entries(filters).forEach(([key, value]) => {
-    if (!["pageNumber", "limitNumber", "sortBy", "order"].includes(key)) {
+    if (!["page", "limit", "sortBy", "order"].includes(key)) {
       const keys = key.split(".");
       let currentLevel = whereClause;
 
@@ -25,7 +25,6 @@ export const getWhereClause = (req: Request, schema: z.ZodObject<any>) => {
           }
         });
       } catch (err) {
-        console.log(err);
         hasInvalidFilter = true;
       }
     }

@@ -9,15 +9,30 @@ import {
 import { CreateNhanVienDto, UpdateNhanVienDto } from "../dtos/nhanVien.dto";
 import { apiResponse } from "../utils/apiResponse";
 import httpStatus from "http-status";
+import { nhanVienFields } from "../zods/nhanVienFields";
+import { getPaginationInfo, getPaginationParams } from "../utils/paginations";
+import { getSortingClause } from "../utils/sortings";
+import { getWhereClause } from "../utils/filterings";
 
 export const getAllNhanVienController = async (req: Request, res: Response) => {
-  console.log("hi");
-  const nhanViens = await getAllNhanVien();
+  const { page, limit } = getPaginationParams(req);
+  const orderByClause = getSortingClause(req, nhanVienFields);
+  const whereClause = getWhereClause(req, nhanVienFields);
+
+  const { nhanViens, total } = await getAllNhanVien(
+    page,
+    limit,
+    orderByClause,
+    whereClause
+  );
+
+  const pagination = getPaginationInfo(total, page, limit);
+
   return apiResponse(
     res,
     true,
     httpStatus.OK,
-    nhanViens,
+    { nhanViens, pagination },
     null,
     "Lấy danh sách nhân viên thành công"
   );

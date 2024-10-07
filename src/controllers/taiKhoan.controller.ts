@@ -8,14 +8,30 @@ import {
 import { apiResponse } from "../utils/apiResponse";
 import { Request, Response } from "express";
 import HttpStatus from "http-status";
+import { getPaginationInfo, getPaginationParams } from "../utils/paginations";
+import { getSortingClause } from "../utils/sortings";
+import { getWhereClause } from "../utils/filterings";
+import { taiKhoanFields } from "../zods/taiKhoanFields";
 
 export const getAllTaiKhoanController = async (req: Request, res: Response) => {
-  const taiKhoan = await getAllTaiKhoan();
+  const { page, limit } = getPaginationParams(req);
+  const orderByClause = getSortingClause(req, taiKhoanFields);
+  const whereClause = getWhereClause(req, taiKhoanFields);
+
+  const { taiKhoans, total } = await getAllTaiKhoan(
+    page,
+    limit,
+    orderByClause,
+    whereClause
+  );
+
+  const pagination = getPaginationInfo(total, page, limit);
+
   return apiResponse(
     res,
     true,
     HttpStatus.OK,
-    taiKhoan,
+    { taiKhoans, pagination },
     null,
     "Lấy tất cả tài khoản thành công"
   );

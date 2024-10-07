@@ -9,14 +9,29 @@ import {
 import { apiResponse } from "../utils/apiResponse";
 import { Request, Response } from "express";
 import httpStatus from "http-status";
+import { sachFields } from "../zods/sachFields";
+import { getPaginationInfo, getPaginationParams } from "../utils/paginations";
+import { getSortingClause } from "../utils/sortings";
+import { getWhereClause } from "../utils/filterings";
 
 export const getAllSachController = async (req: Request, res: Response) => {
-  const sachs = await getAllSach();
+  const { page, limit } = getPaginationParams(req);
+  const orderByClause = getSortingClause(req, sachFields);
+  const whereClause = getWhereClause(req, sachFields);
+
+  const { sachs, total } = await getAllSach(
+    page,
+    limit,
+    orderByClause,
+    whereClause
+  );
+
+  const pagination = getPaginationInfo(total, page, limit);
   return apiResponse(
     res,
     true,
     httpStatus.OK,
-    sachs,
+    { sachs, pagination },
     null,
     "Lấy danh sách sách thành công"
   );

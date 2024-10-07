@@ -14,9 +14,10 @@ export const getAllDocGia = async (
   const [docGias, total] = await Promise.all([
     prisma.docGia.findMany({
       where: whereClause,
-      skip,
+      skip: skip,
       take: limit,
       orderBy: orderByClause,
+      include: { TaiKhoan: true },
     }),
     prisma.docGia.count({ where: whereClause }),
   ]);

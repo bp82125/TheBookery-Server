@@ -11,13 +11,28 @@ import { NoCopiesAvailableException } from "../exceptions/NoCopiesAvailableExcep
 import { prisma } from "../prisma/prismaClient";
 import { BookNotReturnedException } from "../exceptions/BookNotReturnedException";
 
-export const getAllTDMS = async () => {
-  return prisma.theoDoiMuonSach.findMany({
-    include: {
-      DocGia: true,
-      Sach: true,
-    },
-  });
+export const getAllTDMS = async (
+  page: number,
+  limit: number,
+  orderByClause: object,
+  whereClause: object
+) => {
+  const skip = (page - 1) * limit;
+  const [TDMSs, total] = await Promise.all([
+    prisma.theoDoiMuonSach.findMany({
+      where: whereClause,
+      skip: skip,
+      take: limit,
+      orderBy: orderByClause,
+      include: {
+        DocGia: true,
+        Sach: true,
+      },
+    }),
+    prisma.theoDoiMuonSach.count({ where: whereClause }),
+  ]);
+
+  return { TDMSs, total };
 };
 
 export const getTDMSById = async (id: string) => {
@@ -46,6 +61,10 @@ export const createTDMS = async (data: CreateTDMSDto) => {
         notIn: ["RETURNED", "REJECTED"],
       },
     },
+    include: {
+      DocGia: true,
+      Sach: true,
+    },
   });
 
   if (existingTDMS) {
@@ -64,7 +83,10 @@ export const approveOrReject = async (
 ) => {
   const TDMS = await prisma.theoDoiMuonSach.findUnique({
     where: { MaTDMS: id },
-    include: { Sach: true },
+    include: {
+      DocGia: true,
+      Sach: true,
+    },
   });
 
   if (!TDMS) {

@@ -3,11 +3,25 @@ import { CreateSachDto, UpdateSachDto } from "../dtos/sach.dto";
 import { EntityNotFoundException } from "../exceptions/EntityNotFoundException";
 import { prisma } from "../prisma/prismaClient";
 
-export const getAllSach = async () => {
-  return await prisma.sach.findMany({
-    where: { DaXoa: false },
-    include: { NhaXuatBan: true },
-  });
+export const getAllSach = async (
+  page: number,
+  limit: number,
+  orderByClause: object,
+  whereClause: object
+) => {
+  const skip = (page - 1) * limit;
+  const [sachs, total] = await Promise.all([
+    prisma.sach.findMany({
+      where: whereClause,
+      skip: skip,
+      take: limit,
+      orderBy: orderByClause,
+      include: { NhaXuatBan: true },
+    }),
+    prisma.sach.count({ where: whereClause }),
+  ]);
+
+  return { sachs, total };
 };
 
 export const getSachById = async (id: string) => {
@@ -34,13 +48,17 @@ export const createSach = async (data: CreateSachDto) => {
     );
   }
 
-  const sach = await prisma.sach.create({ data });
+  const sach = await prisma.sach.create({
+    data: data,
+    include: { NhaXuatBan: true },
+  });
   return sach;
 };
 
 export const updateSach = async (id: string, data: UpdateSachDto) => {
   const oldSach = await prisma.sach.findUnique({
     where: { MaSach: id },
+    include: { NhaXuatBan: true },
   });
 
   if (!oldSach) {
@@ -55,6 +73,7 @@ export const updateSach = async (id: string, data: UpdateSachDto) => {
     data: {
       ...sachData,
     },
+    include: { NhaXuatBan: true },
   });
 
   return updatedSach;

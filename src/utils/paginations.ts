@@ -16,3 +16,21 @@ export const getPaginationParams = (req: Request) => {
 
   return parsedQuery.data;
 };
+
+export const getPaginationInfo = (
+  total: number,
+  page: number,
+  limit: number
+) => {
+  const totalPages = Math.ceil(total / limit);
+  const hasNextPage = page < totalPages;
+  const hasPreviousPage = page > 1;
+
+  return {
+    total_records: total,
+    current_page: page,
+    total_pages: totalPages,
+    next_page: hasNextPage ? page + 1 : null,
+    prev_page: hasPreviousPage ? page - 1 : null,
+  };
+};
