@@ -9,14 +9,28 @@ import {
 import { apiResponse } from "../utils/apiResponse";
 import { Request, Response } from "express";
 import httpStatus from "http-status";
+import { getPaginationParams } from "../utils/paginations";
+import { getSortingParams } from "../utils/sortings";
+import { getWhereClause } from "../utils/filterings";
+import { docGiaFields } from "../utils/modelFields";
 
 export const getAllDocGiaController = async (req: Request, res: Response) => {
-  const docGias = await getAllDocGia();
+  const { pageNumber, limitNumber } = getPaginationParams(req);
+  const orderByClause = getSortingParams(req);
+  const whereClause = getWhereClause(req, docGiaFields);
+
+  const { docGias, total } = await getAllDocGia(
+    pageNumber,
+    limitNumber,
+    orderByClause,
+    whereClause
+  );
+
   return apiResponse(
     res,
     true,
     httpStatus.OK,
-    docGias,
+    { docGias, total, page: pageNumber, limit: limitNumber },
     null,
     "Lấy danh sách đọc giả thành công"
   );

@@ -24,6 +24,16 @@ export const getSachById = async (id: string) => {
 };
 
 export const createSach = async (data: CreateSachDto) => {
+  const NXB = await prisma.nhaXuatBan.findUnique({
+    where: { MaNXB: data.MaNXB },
+  });
+
+  if (!NXB) {
+    throw new EntityNotFoundException(
+      `Nhà xuất bản với mã ${data.MaNXB} không tìm thấy`
+    );
+  }
+
   const sach = await prisma.sach.create({ data });
   return sach;
 };

@@ -4,10 +4,24 @@ import { prisma } from "../prisma/prismaClient";
 import { plainToInstance } from "class-transformer";
 import { AccountAlreadyLinkedException } from "../exceptions/AccountAlreadyLinkedException";
 
-export const getAllDocGia = async () => {
-  return await prisma.docGia.findMany({
-    where: { DaXoa: false },
-  });
+export const getAllDocGia = async (
+  page: number,
+  limit: number,
+  orderByClause: object,
+  whereClause: object
+) => {
+  const skip = (page - 1) * limit;
+  const [docGias, total] = await Promise.all([
+    prisma.docGia.findMany({
+      where: whereClause,
+      skip,
+      take: limit,
+      orderBy: orderByClause,
+    }),
+    prisma.docGia.count({ where: whereClause }),
+  ]);
+
+  return { docGias, total };
 };
 
 export const getDocGiaById = async (id: string) => {
