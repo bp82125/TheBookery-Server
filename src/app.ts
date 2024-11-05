@@ -12,11 +12,16 @@ import theoDoiMuonSachRouter from "./routes/theoDoiMuonSach.routes";
 import { logger } from "./middlewares/logger";
 import { errorHandler } from "./middlewares/errorHandler";
 import { notFoundHandler } from "./middlewares/notFoundHandler";
-
+import cors from "cors";
 const app = express();
 
 app.use(express.json());
 app.use(logger);
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+  })
+);
 
 const apiRouter = express.Router();
 apiRouter.use("/doc-gia", docGiaRouter);

@@ -22,7 +22,10 @@ export class CreateDocGiaDto {
 
   @IsNotEmpty()
   @IsDate()
-  @Transform(({ value }) => new Date(value))
+  @Transform(
+    ({ value }) => (typeof value === "string" ? new Date(value) : value),
+    { toClassOnly: true }
+  )
   @Expose()
   NgaySinh: Date;
 
@@ -65,11 +68,14 @@ export class UpdateDocGiaDto {
   @Expose()
   Ten?: string;
 
-  @IsOptional()
+  @IsNotEmpty()
   @IsDate()
-  @Transform(({ value }) => new Date(value))
+  @Transform(
+    ({ value }) => (typeof value === "string" ? new Date(value) : value),
+    { toClassOnly: true }
+  )
   @Expose()
-  NgaySinh?: Date;
+  NgaySinh: Date;
 
   @IsOptional()
   @IsEnum(GioiTinh)

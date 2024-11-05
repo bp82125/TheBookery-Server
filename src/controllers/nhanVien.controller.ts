@@ -19,7 +19,7 @@ export const getAllNhanVienController = async (req: Request, res: Response) => {
   const orderByClause = getSortingClause(req, nhanVienFields);
   const whereClause = getWhereClause(req, nhanVienFields);
 
-  const { nhanViens, total } = await getAllNhanVien(
+  const { nhanViens, total, chucVus } = await getAllNhanVien(
     page,
     limit,
     orderByClause,
@@ -32,7 +32,7 @@ export const getAllNhanVienController = async (req: Request, res: Response) => {
     res,
     true,
     httpStatus.OK,
-    { nhanViens, pagination },
+    { nhanViens, pagination, chucVus },
     null,
     "Lấy danh sách nhân viên thành công"
   );

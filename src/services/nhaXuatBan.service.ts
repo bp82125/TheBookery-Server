@@ -19,6 +19,11 @@ export const getAllNhaXuatBan = async (
       skip: skip,
       take: limit,
       orderBy: orderByClause,
+      include: {
+        _count: {
+          select: { Sach: true },
+        },
+      },
     }),
 
     prisma.nhaXuatBan.count({ where: whereClause }),
@@ -30,6 +35,11 @@ export const getAllNhaXuatBan = async (
 export const getNhaXuatBanById = async (id: string) => {
   const nhaXuatBan = await prisma.nhaXuatBan.findUnique({
     where: { MaNXB: id },
+    include: {
+      _count: {
+        select: { Sach: true },
+      },
+    },
   });
 
   if (!nhaXuatBan) {

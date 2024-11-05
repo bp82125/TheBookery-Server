@@ -6,25 +6,32 @@ import { plainToInstance } from "class-transformer";
 import { AccountAlreadyLinkedException } from "../exceptions/AccountAlreadyLinkedException";
 
 export const getAllNhanVien = async (
-  page: number,
-  limit: number,
-  orderByClause: object,
-  whereClause: object
+  page: number = 1,
+  limit: number = 10,
+  orderByClause: object = {},
+  whereClause: object = {}
 ) => {
   const skip = (page - 1) * limit;
-  const [nhanViens, total] = await Promise.all([
+
+  const [nhanViens, total, uniqueChucVu] = await Promise.all([
     prisma.nhanVien.findMany({
       where: whereClause,
-      skip: skip,
+      skip,
       take: limit,
       orderBy: orderByClause,
       include: { TaiKhoan: true },
     }),
-
     prisma.nhanVien.count({ where: whereClause }),
+    prisma.nhanVien.findMany({
+      distinct: ["ChucVu"],
+      where: { DaXoa: false },
+      select: { ChucVu: true },
+    }),
   ]);
 
-  return { nhanViens, total };
+  const chucVus = uniqueChucVu.map((item) => item.ChucVu);
+
+  return { nhanViens, total, chucVus };
 };
 
 export const getNhanVienById = async (id: string) => {

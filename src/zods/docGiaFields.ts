@@ -4,6 +4,7 @@ import { defaultFields } from "./defaultFields";
 export const docGiaFields = z
   .object({
     ...defaultFields,
+    MaDocGia: z.string().optional(),
     HoLot: z.string().optional(),
     Ten: z.string().optional(),
     NgaySinh: z.date().optional(),
