@@ -5,6 +5,8 @@ import {
   deleteTaiKhoanController,
   getAllTaiKhoanController,
   getTaiKhoanByIdController,
+  resetMatKhauTaiKhoanController,
+  toggleTaiKhoanController,
 } from "../controllers/taiKhoan.controller";
 import { CreateTaiKhoanDto } from "../dtos/taiKhoan.dto";
 import { validateRequest } from "../middlewares/validateRequest";
@@ -20,6 +22,10 @@ taiKhoanRouter.post(
   validateRequest(CreateTaiKhoanDto),
   asyncHandler(createTaiKhoanController)
 );
+
+taiKhoanRouter.patch("/:id/toggle", toggleTaiKhoanController);
+
+taiKhoanRouter.patch("/:id/reset-password", resetMatKhauTaiKhoanController);
 
 taiKhoanRouter.delete("/:id", asyncHandler(deleteTaiKhoanController));
 

@@ -5,6 +5,17 @@ const isValidObjectId = (value: string): boolean => {
   return typeof value === "string" && /^[0-9a-fA-F]{24}$/.test(value);
 };
 
+const isEnumField = (schema: z.ZodObject<any>, fieldName: string): boolean => {
+  const field = schema.shape[fieldName];
+
+  let unwrappedField = field;
+  if (field instanceof z.ZodOptional || field instanceof z.ZodNullable) {
+    unwrappedField = field._def.innerType;
+  }
+
+  return unwrappedField instanceof z.ZodEnum;
+};
+
 const handleObjectIdFilter = (
   key: string,
   value: string,
@@ -49,6 +60,22 @@ const handleDefaultFilter = (
   });
 };
 
+const handleEnumFilter = (
+  key: string,
+  value: any,
+  enumType: z.ZodEnum<any> | z.ZodNativeEnum<any>,
+  currentLevel: any
+) => {
+  try {
+    const enumValue = enumType.parse(value);
+    currentLevel[key] = {
+      equals: enumValue,
+    };
+  } catch (err) {
+    throw new Error(`Invalid value for enum field ${key}`);
+  }
+};
+
 export const getWhereClause = (req: Request, schema: z.ZodObject<any>) => {
   const filters = req.query;
   const whereClause: { [key: string]: any } = { DaXoa: false };
@@ -60,7 +87,11 @@ export const getWhereClause = (req: Request, schema: z.ZodObject<any>) => {
       let currentLevel = whereClause;
 
       try {
-        if (key.startsWith("Ma")) {
+        const fieldSchema = schema.shape[key];
+
+        if (isEnumField(schema, key)) {
+          handleEnumFilter(key, value, fieldSchema, currentLevel);
+        } else if (key.startsWith("Ma")) {
           handleObjectIdFilter(key, value as string, currentLevel);
         } else if (key.endsWith("_count")) {
           handleCountFilter(key, value as string, currentLevel);

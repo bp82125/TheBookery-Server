@@ -1,9 +1,12 @@
 import { CreateTaiKhoanDto } from "../dtos/taiKhoan.dto";
 import {
+  changeMatKhauTaiKhoan,
   createTaiKhoan,
   deleteTaiKhoan,
   getAllTaiKhoan,
   getTaiKhoanById,
+  resetMatKhauTaiKhoan,
+  toggleTaiKhoan,
 } from "../services/taiKhoan.service";
 import { apiResponse } from "../utils/apiResponse";
 import { Request, Response } from "express";
@@ -66,6 +69,64 @@ export const createTaiKhoanController = async (
     newTaiKhoan,
     null,
     "Tài khoản mới được tạo thành công"
+  );
+};
+
+export const toggleTaiKhoanController = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  const updatedTaiKhoan = await toggleTaiKhoan(id);
+  const statusMessage = updatedTaiKhoan.KichHoat ? "kích hoạt" : "vô hiệu hóa";
+
+  return apiResponse(
+    res,
+    true,
+    HttpStatus.OK,
+    updatedTaiKhoan,
+    null,
+    `Tài khoản với mã ${id} đã được ${statusMessage} thành công`
+  );
+};
+
+export const resetMatKhauTaiKhoanController = async (
+  req: Request,
+  res: Response
+) => {
+  const { id } = req.params;
+  const { newMatKhau } = req.body;
+
+  const updatedTaiKhoan = await resetMatKhauTaiKhoan(id, newMatKhau);
+
+  return apiResponse(
+    res,
+    true,
+    HttpStatus.OK,
+    updatedTaiKhoan,
+    null,
+    `Mật khẩu cho tài khoản với mã ${id} đã được đặt lại thành công`
+  );
+};
+
+export const changeMatKhauTaiKhoanController = async (
+  req: Request,
+  res: Response
+) => {
+  const { id } = req.params;
+  const { oldMatKhau, newMatKhau } = req.body;
+
+  const updatedTaiKhoan = await changeMatKhauTaiKhoan(
+    id,
+    oldMatKhau,
+    newMatKhau
+  );
+
+  return apiResponse(
+    res,
+    true,
+    HttpStatus.OK,
+    updatedTaiKhoan,
+    null,
+    `Mật khẩu cho tài khoản với mã ${id} đã được thay đổi thành công`
   );
 };
 
