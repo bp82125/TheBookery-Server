@@ -4,6 +4,7 @@ import { defaultFields } from "./defaultFields";
 export const theoDoiMuonSachFields = z
   .object({
     ...defaultFields,
+    MaTDMS: z.string().optional(),
     NgayYeuCau: z.date().optional(),
     NgayDuyet: z.date().optional(),
     NgayMuon: z.date().optional(),

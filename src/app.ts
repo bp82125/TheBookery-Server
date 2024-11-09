@@ -13,6 +13,7 @@ import { logger } from "./middlewares/logger";
 import { errorHandler } from "./middlewares/errorHandler";
 import { notFoundHandler } from "./middlewares/notFoundHandler";
 import cors from "cors";
+import cloudinaryRouter from "./routes/cloudinary.routes";
 const app = express();
 
 app.use(express.json());
@@ -30,6 +31,7 @@ apiRouter.use("/nhan-vien", nhanVienRouter);
 apiRouter.use("/nha-xuat-ban", nhaXuatBanRouter);
 apiRouter.use("/sach", sachRouter);
 apiRouter.use("/theo-doi-muon-sach", theoDoiMuonSachRouter);
+apiRouter.use("/cloudinary/signature", cloudinaryRouter);
 
 app.use("/api/v1", apiRouter);
 app.use(notFoundHandler);

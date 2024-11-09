@@ -54,12 +54,34 @@ export const getTDMSById = async (id: string) => {
 };
 
 export const createTDMS = async (data: CreateTDMSDto) => {
+  const docGia = await prisma.docGia.findUnique({
+    where: { MaDocGia: data.MaDocGia },
+  });
+
+  if (!docGia) {
+    throw new EntityNotFoundException(
+      `Không tìm thấy đọc giả với mã ${data.MaDocGia}`
+    );
+  }
+
+  const sach = await prisma.sach.findUnique({
+    where: { MaSach: data.MaSach },
+    include: { NhaXuatBan: true },
+  });
+
+  if (!sach) {
+    throw new EntityNotFoundException(
+      `Không tìm thấy sách với mã ${data.MaSach}`
+    );
+  }
+
   const existingTDMS = await prisma.theoDoiMuonSach.findFirst({
     where: {
       MaSach: data.MaSach,
       TrangThaiMuonSach: {
         notIn: ["RETURNED", "REJECTED"],
       },
+      MaDocGia: data.MaDocGia,
     },
     include: {
       DocGia: true,
@@ -67,9 +89,26 @@ export const createTDMS = async (data: CreateTDMSDto) => {
     },
   });
 
+  if (existingTDMS?.TrangThaiMuonSach === "PENDING") {
+    throw new BookNotReturnedException(
+      `Sách ${sach.TenSach} đã có yêu cầu mượn của đọc giả ${docGia.HoTen}`
+    );
+  }
+  if (existingTDMS?.TrangThaiMuonSach === "APPROVED") {
+    throw new BookNotReturnedException(
+      `Sách ${sach.TenSach} đã được duyệt mượn nhưng chưa được đọc giả của đọc giả ${docGia.HoTen} lấy`
+    );
+  }
+
+  if (existingTDMS?.TrangThaiMuonSach === "PICKED_UP") {
+    throw new BookNotReturnedException(
+      `Sách ${sach.TenSach} đã được đọc giả ${docGia.HoTen} lấy nhưng chưa trả`
+    );
+  }
+
   if (existingTDMS) {
     throw new BookNotReturnedException(
-      `Sách với mã ${data.MaSach} đã được mượn trước đó và chưa trả`
+      `Đã tồn tại đơn mượn sách ${sach.TenSach} của đọc giả ${docGia.HoTen} trong hệ thống`
     );
   }
 
@@ -96,14 +135,16 @@ export const approveOrReject = async (
   }
 
   if (data.TrangThaiMuonSach === "APPROVED" && TDMS.Sach.SoQuyen <= 0) {
-    throw new NoCopiesAvailableException();
+    throw new NoCopiesAvailableException(
+      `Sách ${TDMS.Sach.TenSach} hiện không còn quyển nào trong hệ thống`
+    );
   }
 
   const updatedTDMS = await prisma.theoDoiMuonSach.update({
     where: { MaTDMS: id },
     data: {
       TrangThaiMuonSach: data.TrangThaiMuonSach,
-      NgayDuyet: data.TrangThaiMuonSach === "APPROVED" ? new Date() : null,
+      NgayDuyet: new Date(),
     },
     include: {
       DocGia: true,
