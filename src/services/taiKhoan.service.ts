@@ -1,9 +1,10 @@
-import { CreateTaiKhoanDto } from "../dtos/taiKhoan.dto";
+import { CreateTaiKhoanDto, LoginTaiKhoanDto } from "../dtos/taiKhoan.dto";
 import { EntityNotFoundException } from "../exceptions/EntityNotFoundException";
 import { prisma } from "../prisma/prismaClient";
 import { UsernameAlreadyExistsException } from "../exceptions/UsernameAlreadyExistsException";
 import { scryptSync, randomBytes, timingSafeEqual } from "crypto";
 import { InvalidPasswordException } from "../exceptions/InvalidPasswordException";
+import jwt from "jsonwebtoken";
 
 export const getAllTaiKhoan = async (
   page: number,
@@ -60,6 +61,37 @@ export const createTaiKhoan = async (data: CreateTaiKhoanDto) => {
   });
 
   return taiKhoan;
+};
+
+export const loginTaiKhoan = async (data: LoginTaiKhoanDto) => {
+  const user = await prisma.taiKhoan.findUnique({
+    where: { TenDangNhap: data.TenDangNhap },
+    include: {
+      DocGia: true,
+      NhanVien: true,
+    },
+  });
+
+  if (!user) {
+    throw new Error("Tài khoản hoặc mật khẩu không tồn tại");
+  }
+
+  const [salt, hash] = user.MatKhau.split(":");
+  const hashedPassword = scryptSync(data.MatKhau, salt, 64).toString("hex");
+
+  if (hashedPassword !== hash) {
+    throw new Error("Tài khoản hoặc mật khẩu không tồn tại");
+  }
+
+  const token = jwt.sign(
+    { id: user.MaTaiKhoan },
+    process.env.JWT_SECRET as string,
+    {
+      expiresIn: "1h",
+    }
+  );
+
+  return { user, token };
 };
 
 export const toggleTaiKhoan = async (id: string) => {

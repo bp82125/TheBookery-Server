@@ -5,17 +5,25 @@ import {
   deleteTaiKhoanController,
   getAllTaiKhoanController,
   getTaiKhoanByIdController,
+  loginTaiKhoanController,
   resetMatKhauTaiKhoanController,
   toggleTaiKhoanController,
 } from "../controllers/taiKhoan.controller";
 import { CreateTaiKhoanDto } from "../dtos/taiKhoan.dto";
 import { validateRequest } from "../middlewares/validateRequest";
+import { validateAuthPayload } from "../middlewares/validateAuthPayload";
+import { validateMongoId } from "../middlewares/validateMongoId";
+import { protectRoute } from "../middlewares/auth";
 
 const taiKhoanRouter = Router();
 
-taiKhoanRouter.get("/", asyncHandler(getAllTaiKhoanController));
+taiKhoanRouter.get("/", protectRoute, asyncHandler(getAllTaiKhoanController));
 
-taiKhoanRouter.get("/:id", asyncHandler(getTaiKhoanByIdController));
+taiKhoanRouter.get(
+  "/:id",
+  validateMongoId,
+  asyncHandler(getTaiKhoanByIdController)
+);
 
 taiKhoanRouter.post(
   "/",
@@ -23,10 +31,20 @@ taiKhoanRouter.post(
   asyncHandler(createTaiKhoanController)
 );
 
-taiKhoanRouter.patch("/:id/toggle", toggleTaiKhoanController);
+taiKhoanRouter.post("/login", validateAuthPayload, loginTaiKhoanController);
 
-taiKhoanRouter.patch("/:id/reset-password", resetMatKhauTaiKhoanController);
+taiKhoanRouter.patch("/:id/toggle", validateMongoId, toggleTaiKhoanController);
 
-taiKhoanRouter.delete("/:id", asyncHandler(deleteTaiKhoanController));
+taiKhoanRouter.patch(
+  "/:id/reset-password",
+  validateMongoId,
+  resetMatKhauTaiKhoanController
+);
+
+taiKhoanRouter.delete(
+  "/:id",
+  validateMongoId,
+  asyncHandler(deleteTaiKhoanController)
+);
 
 export default taiKhoanRouter;

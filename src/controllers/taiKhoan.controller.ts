@@ -1,10 +1,11 @@
-import { CreateTaiKhoanDto } from "../dtos/taiKhoan.dto";
+import { CreateTaiKhoanDto, LoginTaiKhoanDto } from "../dtos/taiKhoan.dto";
 import {
   changeMatKhauTaiKhoan,
   createTaiKhoan,
   deleteTaiKhoan,
   getAllTaiKhoan,
   getTaiKhoanById,
+  loginTaiKhoan,
   resetMatKhauTaiKhoan,
   toggleTaiKhoan,
 } from "../services/taiKhoan.service";
@@ -69,6 +70,22 @@ export const createTaiKhoanController = async (
     newTaiKhoan,
     null,
     "Tài khoản mới được tạo thành công"
+  );
+};
+
+export const loginTaiKhoanController = async (
+  req: Request<{}, {}, LoginTaiKhoanDto>,
+  res: Response
+) => {
+  const { user, token } = await loginTaiKhoan(req.body);
+
+  return apiResponse(
+    res,
+    true,
+    HttpStatus.OK,
+    { user, token },
+    null,
+    "Đăng nhập thành công"
   );
 };
 

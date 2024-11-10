@@ -15,36 +15,59 @@ import {
   CreateTDMSDto,
   PickUpTDMSDto,
 } from "../dtos/theoDoiMuonSach.dto";
+import { validateMongoId } from "../middlewares/validateMongoId";
+import { protectRoute } from "../middlewares/auth";
 
 const theoDoiMuonSachRouter = Router();
 
-theoDoiMuonSachRouter.get("/", asyncHandler(getAllTDMSController));
+theoDoiMuonSachRouter.get(
+  "/",
+  protectRoute,
+  asyncHandler(getAllTDMSController)
+);
 
-theoDoiMuonSachRouter.get("/:id", asyncHandler(getTDMSByIdController));
+theoDoiMuonSachRouter.get(
+  "/:id",
+  protectRoute,
+  validateMongoId,
+  asyncHandler(getTDMSByIdController)
+);
 
 theoDoiMuonSachRouter.post(
   "/",
+  protectRoute,
   validateRequest(CreateTDMSDto),
   asyncHandler(createTDMSController)
 );
 
 theoDoiMuonSachRouter.patch(
   "/:id/duyet",
+  protectRoute,
+  validateMongoId,
   validateRequest(ApproveOrRejectTDMSDto),
   asyncHandler(approveOrRejectController)
 );
 
 theoDoiMuonSachRouter.patch(
   "/:id/lay-sach",
+  protectRoute,
+  validateMongoId,
   validateRequest(PickUpTDMSDto),
   asyncHandler(pickUpBookController)
 );
 
 theoDoiMuonSachRouter.patch(
   "/:id/tra-sach",
+  protectRoute,
+  validateMongoId,
   asyncHandler(returnBookController)
 );
 
-theoDoiMuonSachRouter.delete("/:id", asyncHandler(deleteTDMSController));
+theoDoiMuonSachRouter.delete(
+  "/:id",
+  protectRoute,
+  validateMongoId,
+  asyncHandler(deleteTDMSController)
+);
 
 export default theoDoiMuonSachRouter;

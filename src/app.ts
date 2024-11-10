@@ -8,12 +8,15 @@ import nhaXuatBanRouter from "./routes/nhaXuatBan.routes";
 import sachRouter from "./routes/sach.routes";
 import nhanVienRouter from "./routes/nhanVien.routes";
 import theoDoiMuonSachRouter from "./routes/theoDoiMuonSach.routes";
+import cloudinaryRouter from "./routes/cloudinary.routes";
 
 import { logger } from "./middlewares/logger";
 import { errorHandler } from "./middlewares/errorHandler";
 import { notFoundHandler } from "./middlewares/notFoundHandler";
 import cors from "cors";
-import cloudinaryRouter from "./routes/cloudinary.routes";
+
+import passport from "./config/passport";
+
 const app = express();
 
 app.use(express.json());
@@ -36,5 +39,6 @@ apiRouter.use("/cloudinary/signature", cloudinaryRouter);
 app.use("/api/v1", apiRouter);
 app.use(notFoundHandler);
 app.use(errorHandler);
+app.use(passport.initialize());
 
 export default app;

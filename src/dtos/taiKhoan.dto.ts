@@ -1,11 +1,5 @@
 import { Expose } from "class-transformer";
-import {
-  IsEnum,
-  IsMongoId,
-  IsNotEmpty,
-  IsString,
-  IsOptional,
-} from "class-validator";
+import { IsEnum, IsNotEmpty, IsString, IsOptional } from "class-validator";
 import { LoaiTaiKhoan } from "@prisma/client";
 
 export class CreateTaiKhoanDto {
@@ -39,4 +33,16 @@ export class UpdateTaiKhoanDto {
   @IsEnum(LoaiTaiKhoan)
   @Expose()
   LoaiTaiKhoan?: LoaiTaiKhoan;
+}
+
+export class LoginTaiKhoanDto {
+  @IsString()
+  @IsNotEmpty()
+  @Expose()
+  TenDangNhap: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @Expose()
+  MatKhau: string;
 }
