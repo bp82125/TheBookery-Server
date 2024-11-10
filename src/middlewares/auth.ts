@@ -20,7 +20,6 @@ export function protectRoute(req: Request, res: Response, next: NextFunction) {
         );
       }
 
-      // Attach the authenticated user to the request
       req.user = user;
       next();
     }

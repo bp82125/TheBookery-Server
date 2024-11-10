@@ -87,7 +87,7 @@ export const loginTaiKhoan = async (data: LoginTaiKhoanDto) => {
     { id: user.MaTaiKhoan },
     process.env.JWT_SECRET as string,
     {
-      expiresIn: "1h",
+      expiresIn: process.env.JWT_EXPIRE_IN as string,
     }
   );
 
