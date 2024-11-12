@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { asyncHandler } from "../middlewares/asyncHandler";
 import {
+  changeMatKhauTaiKhoanController,
   createTaiKhoanController,
   deleteTaiKhoanController,
   getAllTaiKhoanController,
@@ -21,6 +22,7 @@ taiKhoanRouter.get("/", protectRoute, asyncHandler(getAllTaiKhoanController));
 
 taiKhoanRouter.get(
   "/:id",
+  protectRoute,
   validateMongoId,
   asyncHandler(getTaiKhoanByIdController)
 );
@@ -31,18 +33,35 @@ taiKhoanRouter.post(
   asyncHandler(createTaiKhoanController)
 );
 
-taiKhoanRouter.post("/login", validateAuthPayload, loginTaiKhoanController);
+taiKhoanRouter.post(
+  "/login",
+  validateAuthPayload,
+  asyncHandler(loginTaiKhoanController)
+);
 
-taiKhoanRouter.patch("/:id/toggle", validateMongoId, toggleTaiKhoanController);
+taiKhoanRouter.patch(
+  "/:id/toggle",
+  protectRoute,
+  validateMongoId,
+  asyncHandler(toggleTaiKhoanController)
+);
 
 taiKhoanRouter.patch(
   "/:id/reset-password",
+  protectRoute,
   validateMongoId,
-  resetMatKhauTaiKhoanController
+  asyncHandler(resetMatKhauTaiKhoanController)
+);
+
+taiKhoanRouter.patch(
+  "/:id/change-password",
+  validateMongoId,
+  asyncHandler(changeMatKhauTaiKhoanController)
 );
 
 taiKhoanRouter.delete(
   "/:id",
+  protectRoute,
   validateMongoId,
   asyncHandler(deleteTaiKhoanController)
 );

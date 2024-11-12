@@ -75,6 +75,15 @@ export const createDocGia = async (data: CreateDocGiaDto) => {
     include: { TaiKhoan: true },
   });
 
+  await prisma.docGia.update({
+    where: {
+      MaDocGia: docGia.MaDocGia,
+    },
+    data: {
+      HoTen: `${docGia.HoLot} ${docGia.Ten}`,
+    },
+  });
+
   return docGia;
 };
 
@@ -92,11 +101,20 @@ export const updateDocGia = async (id: string, data: UpdateDocGiaDto) => {
 
   const { MaDocGia, ...updatedFields } = oldDocGia;
 
-  const updatedDocGia = await prisma.docGia.update({
+  const docGia = await prisma.docGia.update({
     where: { MaDocGia: id },
     data: {
       ...updatedFields,
       ...docGiaData,
+    },
+  });
+
+  const updatedDocGia = await prisma.docGia.update({
+    where: {
+      MaDocGia: docGia.MaDocGia,
+    },
+    data: {
+      HoTen: `${docGia.HoLot} ${docGia.Ten}`,
     },
     include: { TaiKhoan: true },
   });
@@ -118,5 +136,14 @@ export const deleteDocGia = async (id: string) => {
     data: { DaXoa: true },
   });
 
-  return { message: `Xóa độc giả với mã ${id} thành công` };
+  await prisma.taiKhoan.update({
+    where: { MaTaiKhoan: docGia.MaTaiKhoan },
+    data: { DaXoa: true, KichHoat: false },
+  });
+
+  await prisma.theoDoiMuonSach.deleteMany({
+    where: { MaDocGia: id },
+  });
+
+  return { message: `Xóa đọc giả với mã ${id} thành công` };
 };

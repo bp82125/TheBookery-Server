@@ -98,4 +98,9 @@ export const deleteNhaXuatBan = async (id: string) => {
     where: { MaNXB: id },
     data: { DaXoa: true },
   });
+
+  await prisma.sach.updateMany({
+    where: { MaNXB: id },
+    data: { DaXoa: true },
+  });
 };

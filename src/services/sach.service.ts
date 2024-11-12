@@ -94,4 +94,8 @@ export const deleteSach = async (id: string) => {
       DaXoa: true,
     },
   });
+
+  await prisma.theoDoiMuonSach.deleteMany({
+    where: { MaSach: id },
+  });
 };

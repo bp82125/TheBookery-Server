@@ -77,13 +77,13 @@ export const loginTaiKhoanController = async (
   req: Request<{}, {}, LoginTaiKhoanDto>,
   res: Response
 ) => {
-  const { user, token } = await loginTaiKhoan(req.body);
+  const { account, token } = await loginTaiKhoan(req.body);
 
   return apiResponse(
     res,
     true,
     HttpStatus.OK,
-    { user, token },
+    { account, token },
     null,
     "Đăng nhập thành công"
   );

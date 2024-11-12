@@ -21,7 +21,8 @@ datasource db {
 model DocGia {
   MaDocGia        String              @id @default(auto()) @map("_id") @db.ObjectId
   HoLot           String
-  Ten             String
+  Ten             String              
+  HoTen           String              @default("")
   NgaySinh        DateTime            @db.Date
   GioiTinh        GioiTinh
   DiaChi          String

@@ -7,6 +7,7 @@ export const docGiaFields = z
     MaDocGia: z.string().optional(),
     HoLot: z.string().optional(),
     Ten: z.string().optional(),
+    HoTen: z.string().optional(),
     NgaySinh: z.date().optional(),
     GioiTinh: z.enum(["MALE", "FEMALE", "UNKNOWN"]).optional(),
     DiaChi: z.string().optional(),

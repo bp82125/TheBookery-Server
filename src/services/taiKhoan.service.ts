@@ -64,7 +64,7 @@ export const createTaiKhoan = async (data: CreateTaiKhoanDto) => {
 };
 
 export const loginTaiKhoan = async (data: LoginTaiKhoanDto) => {
-  const user = await prisma.taiKhoan.findUnique({
+  const account = await prisma.taiKhoan.findUnique({
     where: { TenDangNhap: data.TenDangNhap },
     include: {
       DocGia: true,
@@ -72,26 +72,26 @@ export const loginTaiKhoan = async (data: LoginTaiKhoanDto) => {
     },
   });
 
-  if (!user) {
-    throw new Error("Tài khoản hoặc mật khẩu không tồn tại");
+  if (!account) {
+    throw new EntityNotFoundException("Tài khoản hoặc mật khẩu không tồn tại");
   }
 
-  const [salt, hash] = user.MatKhau.split(":");
+  const [salt, hash] = account.MatKhau.split(":");
   const hashedPassword = scryptSync(data.MatKhau, salt, 64).toString("hex");
 
   if (hashedPassword !== hash) {
-    throw new Error("Tài khoản hoặc mật khẩu không tồn tại");
+    throw new EntityNotFoundException("Tài khoản hoặc mật khẩu không tồn tại");
   }
 
   const token = jwt.sign(
-    { id: user.MaTaiKhoan },
+    { id: account.MaTaiKhoan },
     process.env.JWT_SECRET as string,
     {
       expiresIn: process.env.JWT_EXPIRE_IN as string,
     }
   );
 
-  return { user, token };
+  return { account, token };
 };
 
 export const toggleTaiKhoan = async (id: string) => {

@@ -25,7 +25,6 @@ docGiaRouter.get(
 
 docGiaRouter.post(
   "/",
-  protectRoute,
   validateRequest(CreateDocGiaDto),
   asyncHandler(createDocGiaController)
 );

@@ -16,6 +16,8 @@ import { notFoundHandler } from "./middlewares/notFoundHandler";
 import cors from "cors";
 
 import passport from "./config/passport";
+import { createAdminAccount } from "./utils/adminInitializer";
+import tongQuanRouter from "./routes/overview.routes";
 
 const app = express();
 
@@ -34,11 +36,16 @@ apiRouter.use("/nhan-vien", nhanVienRouter);
 apiRouter.use("/nha-xuat-ban", nhaXuatBanRouter);
 apiRouter.use("/sach", sachRouter);
 apiRouter.use("/theo-doi-muon-sach", theoDoiMuonSachRouter);
+apiRouter.use("/tong-quan", tongQuanRouter);
 apiRouter.use("/cloudinary/signature", cloudinaryRouter);
 
 app.use("/api/v1", apiRouter);
 app.use(notFoundHandler);
 app.use(errorHandler);
 app.use(passport.initialize());
+
+createAdminAccount().catch((error) => {
+  console.error(error);
+});
 
 export default app;
