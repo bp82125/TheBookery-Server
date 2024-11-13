@@ -30,6 +30,7 @@ export const getAllTaiKhoan = async (
 export const getTaiKhoanById = async (id: string) => {
   const taiKhoan = await prisma.taiKhoan.findUnique({
     where: { MaTaiKhoan: id },
+    include: { DocGia: true, NhanVien: true },
   });
 
   if (!taiKhoan) {
