@@ -77,6 +77,10 @@ export const loginTaiKhoan = async (data: LoginTaiKhoanDto) => {
     throw new EntityNotFoundException("Tài khoản hoặc mật khẩu không tồn tại");
   }
 
+  if (account.DaXoa || !account.KichHoat) {
+    throw new EntityNotFoundException("Tài khoản hoặc mật khẩu không tồn tại");
+  }
+
   const [salt, hash] = account.MatKhau.split(":");
   const hashedPassword = scryptSync(data.MatKhau, salt, 64).toString("hex");
 
