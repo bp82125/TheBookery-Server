@@ -116,6 +116,11 @@ export const deleteNhanVien = async (id: string) => {
     throw new EntityNotFoundException(`Không tìm thấy nhân viên với mã ${id}`);
   }
 
+  await prisma.taiKhoan.update({
+    where: { MaTaiKhoan: nhanVien.MaTaiKhoan },
+    data: { DaXoa: true, KichHoat: false },
+  });
+
   await prisma.nhanVien.update({
     where: { MSNV: id },
     data: { DaXoa: true },

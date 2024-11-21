@@ -50,6 +50,7 @@ const handleDefaultFilter = (
     if (index === keys.length - 1) {
       currentLevel[fieldKey] = {
         contains: value,
+        mode: "insensitive",
       };
     } else {
       if (!currentLevel[fieldKey]) {
