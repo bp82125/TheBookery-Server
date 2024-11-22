@@ -75,6 +75,12 @@ export const createTDMS = async (data: CreateTDMSDto) => {
     );
   }
 
+  if (sach.SoQuyen <= 0) {
+    throw new NoCopiesAvailableException(
+      `Sách ${sach.TenSach} hiện không còn quyển nào trong hệ thống`
+    );
+  }
+
   const existingTDMS = await prisma.theoDoiMuonSach.findFirst({
     where: {
       MaSach: data.MaSach,
