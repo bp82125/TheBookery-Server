@@ -2,6 +2,8 @@
 
 The Bookery is an online platform designed to streamline library management and improve the user experience for borrowing books. This repository contains the backend codebase for the system.
 
+Check out: [The Bookery (Client)](https://github.com/bp82125/TheBookery-Client)
+
 ## Tech Stack
 
 - **Runtime**: Node.js
@@ -74,7 +76,7 @@ ADMIN_USERNAME=admin
 ADMIN_PASSWORD=your_secure_password
 ```
 
-##### 6. Generate Prisma client:
+#### 6. Generate Prisma client:
 
    ```bash
    npx prisma generate
