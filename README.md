@@ -46,12 +46,33 @@ Check out: [The Bookery (Client)](https://github.com/bp82125/TheBookery-Client)
 - Ensure the `DATABASE_URL` in your .env file matches the connection URI you obtained.
 
 #### 4. Set Up Cloudinary
-Create a Cloudinary bucket and obtain the following credentials if you don’t already have them:
+To enable media upload and storage with Cloudinary, you’ll need the following credentials:
 
-- Cloud Name
-- API Key
-- API Secret
-- Upload Preset
+- `cloud_name`
+- `api_key`
+- `api_secret`
+- `upload_preset`
+
+#### Steps to obtain the credentials if you don't have ones:
+
+- Sign Up or Log In:
+   - Go to [Cloudinary](https://cloudinary.com/) and sign up or log in.
+
+- Get Cloud Name, API Key, and API Secret:
+   - After logging in, go to your [Cloudinary Dashboard](https://cloudinary.com/console).
+   - Under **Account Details**, copy the following:
+     - **Cloud Name**
+     - **API Key**
+     - **API Secret**
+
+- Create an Upload Preset:
+   - Go to **Settings** > **Upload** tab.
+   - Scroll down to the **Upload Presets** section.
+   - Click **Add upload preset**.
+   - Configure the preset:
+     - Enable **unsigned uploads** if you want client-side uploads (from frontend).
+     - Optionally configure folder, allowed formats, transformations, etc.
+   - Save and copy the **Upload Preset Name**.
 
 #### 5. Configure Environment Variables
 Copy the .env.example file to create your .env file:
