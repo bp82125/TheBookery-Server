@@ -85,6 +85,13 @@ ADMIN_PASSWORD=your_secure_password
    npx prisma generate
    ```
 
+#### ⚠️ Note: MongoDB Replica Set Required 
+
+Prisma requires MongoDB to run as a **replica set** to support transactions.
+
+If you're using a local MongoDB instance, you can follow this [workaround](https://github.com/prisma/prisma/discussions/18958#discussioncomment-10943316) to set up a single-node replica set.
+
+
 #### 7. Start the development server:
 
    ```bash
